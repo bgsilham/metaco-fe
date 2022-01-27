@@ -7,6 +7,8 @@ import qs from 'querystring'
 export default function DetailEvent() {
   const [isLoading, setIsLoading] = useState(true)
   const [showModalAdd, setShowModalAdd] = useState(false)
+  const [showModalEdit, setShowModalEdit] = useState(false)
+  const [showModalDelete, setShowModalDelete] = useState(false)
   const [firstPlace, setFirstPlace] = useState([])
   const [secondPlace, setSecondPlace] = useState([])
   const [thirdPlace, setThirdPlace] = useState([])
@@ -24,6 +26,27 @@ export default function DetailEvent() {
     }
     if (teamId !== 0) {
       axios.post(`http://192.168.56.1:8100/tournament/result`, qs.stringify(data))
+      .then(res => {
+        setIsLoading(true)
+      }).catch((err) => {
+        alert(err)
+      })
+    } else {
+      alert("Select team first!")
+    }
+  }
+
+  const editTeam = () => {
+    setShowModalEdit(false)
+    const id = position === 1 ? firstPlace[0].id : position === 2 ? secondPlace[0].id : thirdPlace[0].id
+    const data = {
+      team_id: teamId,
+      tournament_id: 1,
+      position: position,
+      point: position === 1 ? 5 : position === 2 ? 3 : 2,
+    }
+    if (teamId !== 0) {
+      axios.patch(`http://192.168.56.1:8100/tournament/result/${id}`, qs.stringify(data))
       .then(res => {
         setIsLoading(true)
       }).catch((err) => {
@@ -82,7 +105,10 @@ export default function DetailEvent() {
               <div className='d-flex flex-row'>
                 {firstPlace.length > 0 ? (
                   <>
-                    <FaPen className='mx-1' />
+                    <FaPen onClick={() => {
+                      setShowModalEdit(true)
+                      setPosition(1)
+                    }} className='mx-1' />
                     <FaTrash className='mx-1' />
                   </>
                 ):(
@@ -105,7 +131,10 @@ export default function DetailEvent() {
               <div className='d-flex flex-row'>
                 {secondPlace.length > 0 ? (
                   <>
-                    <FaPen className='mx-1' />
+                    <FaPen onClick={() => {
+                      setShowModalEdit(true)
+                      setPosition(2)
+                    }} className='mx-1' />
                     <FaTrash className='mx-1' />
                   </>
                 ):(
@@ -128,7 +157,10 @@ export default function DetailEvent() {
               <div className='d-flex flex-row'>
                 {thirdPlace.length > 0 ? (
                   <>
-                    <FaPen className='mx-1' />
+                    <FaPen onClick={() => {
+                      setShowModalEdit(true)
+                      setPosition(3)
+                    }} className='mx-1' />
                     <FaTrash className='mx-1' />
                   </>
                 ):(
@@ -157,7 +189,29 @@ export default function DetailEvent() {
             Close
           </Button>
           <Button variant="primary" onClick={addTeam}>
-            Save Changes
+            Add
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      {/* EDIT MODAL */}
+      <Modal show={showModalEdit} onHide={() => setShowModalEdit(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Select Team</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Select onChange={(e) => setTeamId(e.target.value)} aria-label="Default select example">
+            <option value={0}>--select--</option>
+            {teamData.map((val) => (
+              <option value={val.id}>{val.name}</option>
+            ))}
+          </Form.Select>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModalEdit(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={editTeam}>
+            Edit
           </Button>
         </Modal.Footer>
       </Modal>
