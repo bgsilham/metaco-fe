@@ -57,6 +57,17 @@ export default function DetailEvent() {
     }
   }
 
+  const deleteTeam = () => {
+    setShowModalDelete(false)
+    const id = position === 1 ? firstPlace[0].id : position === 2 ? secondPlace[0].id : thirdPlace[0].id
+      axios.delete(`http://192.168.56.1:8100/tournament/result/${id}`)
+      .then(res => {
+        setIsLoading(true)
+      }).catch((err) => {
+        alert(err)
+      })
+  }
+
   useEffect(() => {
     axios.get(`http://192.168.56.1:8100/tournament/result/1?position=1`)
       .then(res => {
@@ -109,7 +120,10 @@ export default function DetailEvent() {
                       setShowModalEdit(true)
                       setPosition(1)
                     }} className='mx-1' />
-                    <FaTrash className='mx-1' />
+                    <FaTrash onClick={() => {
+                      setShowModalDelete(true)
+                      setPosition(1)
+                    }} className='mx-1' />
                   </>
                 ):(
                   <></>
@@ -135,7 +149,10 @@ export default function DetailEvent() {
                       setShowModalEdit(true)
                       setPosition(2)
                     }} className='mx-1' />
-                    <FaTrash className='mx-1' />
+                    <FaTrash onClick={() => {
+                      setShowModalDelete(true)
+                      setPosition(2)
+                    }} className='mx-1' />
                   </>
                 ):(
                   <></>
@@ -161,7 +178,10 @@ export default function DetailEvent() {
                       setShowModalEdit(true)
                       setPosition(3)
                     }} className='mx-1' />
-                    <FaTrash className='mx-1' />
+                    <FaTrash onClick={() => {
+                      setShowModalDelete(true)
+                      setPosition(3)
+                    }} className='mx-1' />
                   </>
                 ):(
                   <></>
@@ -212,6 +232,20 @@ export default function DetailEvent() {
           </Button>
           <Button variant="primary" onClick={editTeam}>
             Edit
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      {/* DELETE MODAL */}
+      <Modal show={showModalDelete} onHide={() => setShowModalDelete(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Are you sure?</Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModalDelete(false)}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={deleteTeam}>
+            Yes
           </Button>
         </Modal.Footer>
       </Modal>
