@@ -25,7 +25,7 @@ export default function DetailEvent() {
       point: position === 1 ? 5 : position === 2 ? 3 : 2,
     }
     if (teamId !== 0) {
-      axios.post(`tournament/result`, qs.stringify(data))
+      axios.post(`${process.env.REACT_APP_URL}tournament/result`, qs.stringify(data))
       .then(res => {
         setIsLoading(true)
       }).catch((err) => {
