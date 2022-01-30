@@ -195,6 +195,12 @@ html, body, #root {
   font-weight: 200;
   font-size: 15px;
 }
+.exp-player-card-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
 .exp-player-card {
   width: 150px;
   padding: 10px;
