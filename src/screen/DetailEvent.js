@@ -25,7 +25,7 @@ export default function DetailEvent() {
       point: position === 1 ? 5 : position === 2 ? 3 : 2,
     }
     if (teamId !== 0) {
-      axios.post(`http://192.168.56.1:8100/tournament/result`, qs.stringify(data))
+      axios.post(`tournament/result`, qs.stringify(data))
       .then(res => {
         setIsLoading(true)
       }).catch((err) => {
@@ -46,7 +46,7 @@ export default function DetailEvent() {
       point: position === 1 ? 5 : position === 2 ? 3 : 2,
     }
     if (teamId !== 0) {
-      axios.patch(`http://192.168.56.1:8100/tournament/result/${id}`, qs.stringify(data))
+      axios.patch(`${process.env.REACT_APP_URL}tournament/result/${id}`, qs.stringify(data))
       .then(res => {
         setIsLoading(true)
       }).catch((err) => {
@@ -60,7 +60,7 @@ export default function DetailEvent() {
   const deleteTeam = () => {
     setShowModalDelete(false)
     const id = position === 1 ? firstPlace[0].id : position === 2 ? secondPlace[0].id : thirdPlace[0].id
-      axios.delete(`http://192.168.56.1:8100/tournament/result/${id}`)
+      axios.delete(`${process.env.REACT_APP_URL}tournament/result/${id}`)
       .then(res => {
         setIsLoading(true)
       }).catch((err) => {
@@ -69,16 +69,16 @@ export default function DetailEvent() {
   }
 
   useEffect(() => {
-    axios.get(`http://192.168.56.1:8100/tournament/result/1?position=1`)
+    axios.get(`${process.env.REACT_APP_URL}tournament/result/1?position=1`)
       .then(res => {
         setFirstPlace(res.data.data);
-        axios.get(`http://192.168.56.1:8100/tournament/result/1?position=2`)
+        axios.get(`${process.env.REACT_APP_URL}tournament/result/1?position=2`)
           .then(res => {
             setSecondPlace(res.data.data);
-            axios.get(`http://192.168.56.1:8100/tournament/result/1?position=3`)
+            axios.get(`${process.env.REACT_APP_URL}tournament/result/1?position=3`)
               .then(res => {
                 setThirdPlace(res.data.data);
-                axios.get(`http://192.168.56.1:8100/tournament/result/team`)
+                axios.get(`${process.env.REACT_APP_URL}tournament/result/team`)
                   .then(res => {
                     setTeamData(res.data.data);
                     setIsLoading(false)

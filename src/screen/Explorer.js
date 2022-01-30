@@ -16,7 +16,7 @@ export default function Explorer() {
   }
 
   useEffect(() => {
-    axios.get(`http://192.168.56.1:8100/leaderboard/user?search=${search}`)
+    axios.get(`${process.env.REACT_APP_URL}leaderboard/user?search=${search}`)
       .then(res => {
         setStandings(res.data.data)
         setIsLoading(false)

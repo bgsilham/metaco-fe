@@ -15,7 +15,7 @@ export default function Leaderboard() {
   }
 
   useEffect(() => {
-    axios.get(`http://192.168.56.1:8100/leaderboard/team?search=${search}`)
+    axios.get(`${process.env.REACT_APP_URL}leaderboard/team?search=${search}`)
       .then(res => {
         setStandings(res.data.data)
         setIsLoading(false)
